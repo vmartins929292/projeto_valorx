@@ -433,3 +433,4 @@ export default function FeaturedCard({ article, autoplayInterval = 12000, titleL
     </article>
   )
 }
+

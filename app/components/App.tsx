@@ -11,9 +11,10 @@ import TactileButton from './TactileButton'
 import FeaturedCard from './FeaturedCard'
 import NewsCard, { type NewsArticle } from './NewsCard'
 import MarketWidget from './MarketWidget'
+import StocksTicker from './StocksTicker'
 import Frame3Logo from '../imports/Frame3-6-444'
 import { bindScrollWithRaf } from '../utils/scrollRaf'
-import { MENU_ITEMS, STOCKS, NEWS_ARTICLES } from '../data'
+import { MENU_ITEMS, NEWS_ARTICLES } from '../data'
 
 // Throttle por rAF para evitar estouro de cálculos
 function makeRafScheduler<T extends (...args: any[]) => void>(fn: T) {
@@ -37,7 +38,6 @@ export default function App() {
   const [hasOpenedSubmenu, setHasOpenedSubmenu] = useState(false)
   const [activeTab, setActiveTab] = useState('all')
   const [stocksScrollPos, setStocksScrollPos] = useState(0)
-  const [isTickerPaused, setIsTickerPaused] = useState(false)
   const [greetingExpanded, setGreetingExpanded] = useState(true)
   const [showExpandButton, setShowExpandButton] = useState(false)
   const greetingHasBeenToggled = useRef(false)
@@ -50,9 +50,6 @@ export default function App() {
   const stocksRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const lastScrollFlagRef = useRef<boolean>(false)
-
-  // Memoized stocks duplication for ticker
-  const stocksDup = useMemo(() => [...STOCKS, ...STOCKS], [])
 
   // Sliding indicator states and refs
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, top: 0, height: 0 })
@@ -251,38 +248,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#fffffd] flex flex-col">
       {/* Stocks Ticker */}
-      <section className="bg-cyan-950 overflow-hidden">
-        <div className="site-container py-3">
-          <div
-            className={`flex gap-1.5 ticker ${isTickerPaused ? 'ticker-paused' : ''}`}
-            onMouseEnter={() => setIsTickerPaused(true)}
-            onMouseLeave={() => setIsTickerPaused(false)}
-            aria-label="Market ticker autoscroll"
-            role="region"
-          >
-            {stocksDup.map((stock, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 px-2 py-1.5 bg-cyan-900/40 rounded-sm border border-cyan-800/50"
-              >
-                <div className="flex items-center gap-1">
-                  <span className="font-montserrat-semibold text-slate-50 ticker-text">{stock.name}</span>
-                  <span className="font-montserrat text-slate-200 ticker-text opacity-90">{stock.value}</span>
-                  <span
-                    className={`px-1 rounded-sm ${
-                      stock.direction === 'down'
-                        ? 'bg-red-950/50 text-red-500'
-                        : 'bg-cyan-950/50 text-[#2a9d90]'
-                    } font-montserrat-semibold ticker-text`}
-                  >
-                    {stock.change}%
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <StocksTicker />
 
       {/* Navigation - Sticky */}
       <header ref={headerRef} className="header-root sticky top-0 z-50 bg-white/95 border-b border-slate-200">
