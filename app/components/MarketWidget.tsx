@@ -3,22 +3,11 @@
 import { useState, useEffect, memo, useMemo } from 'react'
 import { AreaChart, Area, YAxis, ResponsiveContainer } from 'recharts'
 import { ICONS } from '../icons'
+import type { MarketData, MarketCategory } from '../types'
 
-interface MarketData {
-  name: string
-  symbol: string
-  price: string
-  change: number
-  changePercent: string
-  unit: string
-  data: { value: number }[]
-  chartData: { value: number; month: string }[]
-  icon: string
-  category: string
-}
 
 // Dados de mercado
-const allMarkets: MarketData[] = [
+const allMarkets: readonly MarketData[] = [
   // AGRÍCOLAS
   {
     name: 'Soja',
@@ -669,7 +658,7 @@ const allMarkets: MarketData[] = [
 ]
 
 interface MarketWidgetProps {
-  category?: 'agricolas' | 'metalicas' | 'indices' | 'fx'
+  category?: MarketCategory
   isActive?: boolean
 }
 
@@ -735,19 +724,20 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
       }}
     >
       {/* Tabs no topo */}
-      <div className="flex items-center border-b border-slate-200">
+      <div className="flex items-center border-b border-slate-200 gap-1">
         {['Todas', 'Em Alta', 'Em Queda'].map((tab) => (
           <button
             key={tab}
             onClick={() => handleTabChange(tab)}
-            className={`flex-1 py-1.5 font-montserrat-semibold transition-all duration-200 relative text-center ${
+            className={`flex-1 py-2 px-2 font-montserrat-semibold transition-all duration-200 relative text-center flex items-center justify-center ${
               activeTab === tab
                 ? 'text-slate-900'
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50/50'
             }`}
             style={{ fontSize: '12px' }}
           >
             {tab}
+            {/* Indicador ativo */}
             {activeTab === tab && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2a9d8f]" />
             )}
@@ -755,12 +745,13 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
         ))}
       </div>
 
-      <div className="px-3 pt-2 pb-2">
+      <div className="px-3 pt-3 pb-2">
         {/* Gráfico Principal Grande */}
         <div className="mb-1">
           {/* Header com nome e cotação da commodity selecionada */}
           <div className="flex items-center justify-between mb-1.5">
-            <div className="flex flex-col gap-0.5">
+            {/* Lado esquerdo: Nome e Cotação */}
+            <div className="flex items-center gap-2">
               <span 
                 className="font-montserrat-semibold text-slate-900" 
                 style={{ 
@@ -770,24 +761,27 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
               >
                 {selectedMarket.icon}
               </span>
-              <div className="flex items-center gap-2">
-                <span className="num font-montserrat-semibold text-slate-900" style={{ fontSize: '11px', lineHeight: '1' }}>
-                  ${selectedMarket.price}
-                </span>
-                <span
-                  className={`num font-montserrat-semibold flex items-center gap-0.5 ${
-                    selectedMarket.change > 0 ? 'text-emerald-700' : 'text-red-600'
-                  }`}
-                  style={{ fontSize: '10px', lineHeight: '1' }}
-                >
-                  {selectedMarket.change > 0 ? (
-                    <ICONS.TrendingUp className="w-3 h-3" />
-                  ) : (
-                    <ICONS.TrendingDown className="w-3 h-3" />
-                  )}
-                  {selectedMarket.changePercent}
-                </span>
-              </div>
+              <span className="num font-montserrat-semibold text-slate-900" style={{ fontSize: '11px', lineHeight: '1' }}>
+                ${selectedMarket.price}
+              </span>
+            </div>
+            
+            {/* Lado direito: Seta e Variação Percentual */}
+            <div
+              className="num font-montserrat-semibold flex items-center gap-0.5"
+              style={{ fontSize: '10px', lineHeight: '1' }}
+            >
+              {selectedMarket.change > 0 ? (
+                <>
+                  <ICONS.ChevronUp className="w-3 h-3 text-emerald-800" />
+                  <span className="text-emerald-800">{selectedMarket.changePercent}</span>
+                </>
+              ) : (
+                <>
+                  <ICONS.ChevronDown className="w-3 h-3 text-red-800" />
+                  <span className="text-red-800">{selectedMarket.changePercent}</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -863,7 +857,7 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
             <div
               key={market.symbol}
               onClick={() => isActive && setSelectedMarket(market)}
-              className={`grid grid-cols-[1fr_auto] items-center gap-2 py-0.5 px-2 hover:bg-slate-50 transition-colors cursor-pointer select-none outline-none ${
+              className={`grid grid-cols-[1fr_auto] items-center gap-2 py-1.5 px-2 hover:bg-slate-50 transition-colors cursor-pointer select-none outline-none ${
                 selectedMarket.symbol === market.symbol ? 'bg-slate-50/50 border-l-2 border-slate-300' : ''
               }`}
             >

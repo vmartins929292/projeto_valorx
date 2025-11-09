@@ -20,6 +20,8 @@ import {
   ChevronDown,
   TrendingUp,
   TrendingDown,
+  Clock,
+  Sparkles,
 } from "lucide-react"
 
 export const ICONS = {
@@ -44,6 +46,8 @@ export const ICONS = {
   ChevronDown,
   TrendingUp,
   TrendingDown,
+  Clock,
+  Sparkles,
 } as const
 
 /**

@@ -1,77 +1,117 @@
 # Valor News - Projeto Next.js
 
-Projeto criado com Next.js 14, TypeScript e App Router, importado do Figma.
+Projeto profissional de notícias sobre commodities e mercados financeiros, desenvolvido com Next.js 14, TypeScript e Tailwind CSS.
 
-## Como começar
+## 📁 Estrutura do Projeto
 
-Primeiro, instale as dependências:
+```
+app/
+├── __tests__/              # Testes unitários e de integração
+│   ├── components/
+│   └── hooks/
+├── components/              # Componentes React
+│   ├── layout/             # Componentes de layout (Header, Footer, Sidebar)
+│   ├── legacy/             # Componentes legados (importados de outras fontes)
+│   └── ui/                  # Componentes de UI reutilizáveis
+├── hooks/                   # Hooks customizados
+├── types/                   # Definições de tipos TypeScript
+├── utils/                   # Funções utilitárias
+├── data.ts                 # Dados mockados e constantes
+├── icons.tsx               # Ícones do projeto
+├── assets.ts               # Assets e recursos estáticos
+├── globals.css             # Estilos globais
+├── layout.tsx              # Layout raiz do Next.js
+└── page.tsx                # Página inicial
+
+lib/
+└── utils.ts                # Utilitários compartilhados
+
+public/
+└── images/                 # Imagens estáticas
+```
+
+## 🚀 Tecnologias
+
+- **Next.js 14** - Framework React com App Router
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Estilização utilitária
+- **Framer Motion** - Animações
+- **Recharts** - Gráficos e visualizações
+- **Jest** - Framework de testes
+- **Testing Library** - Testes de componentes React
+
+## 📦 Instalação
 
 ```bash
 npm install
-# ou
-yarn install
-# ou
-pnpm install
 ```
 
-Depois, execute o servidor de desenvolvimento:
+## 🛠️ Scripts Disponíveis
 
 ```bash
+# Desenvolvimento
 npm run dev
-# ou
-yarn dev
-# ou
-pnpm dev
+
+# Build de produção
+npm run build
+
+# Iniciar servidor de produção
+npm start
+
+# Linting
+npm run lint
+
+# Testes
+npm test
+npm run test:watch
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
+## 🏗️ Arquitetura
 
-## Estrutura do projeto
+### Componentes
 
-- `app/` - Diretório principal com as páginas e layouts (App Router)
-- `public/` - Arquivos estáticos (imagens, ícones, etc.)
-- `package.json` - Dependências e scripts do projeto
-- `tsconfig.json` - Configuração do TypeScript
-- `next.config.js` - Configuração do Next.js
+- **Layout Components** (`app/components/layout/`): Componentes estruturais como Header, Footer e Sidebar
+- **UI Components** (`app/components/ui/`): Componentes reutilizáveis de interface
+- **Legacy Components** (`app/components/legacy/`): Componentes importados de outras fontes que precisam ser refatorados
 
-## Scripts disponíveis
+### Hooks Customizados
 
-- `npm run dev` - Inicia o servidor de desenvolvimento
-- `npm run build` - Cria uma build de produção
-- `npm run start` - Inicia o servidor de produção (após o build)
-- `npm run lint` - Executa o linter
+- `useScrollHeader`: Gerencia o comportamento do header ao fazer scroll
+- `useTabIndicator`: Controla o indicador animado das abas
+- `useWaveAnimation`: Gerencia animações em onda para listas
 
-## Próximos passos
+### Tipos TypeScript
 
-Você pode começar a editar a página modificando `app/page.tsx`. A página será atualizada automaticamente conforme você edita o arquivo.
+Todos os tipos compartilhados estão em `app/types/index.ts`:
 
-## Importação do Figma
+- `NewsArticle`
+- `FeaturedArticle`
+- `MenuItem`
+- `Stock`
+- `MarketCategory`
+- `MarketData`
 
-Este projeto foi importado do Figma. Alguns itens precisam ser ajustados:
+## 🧪 Testes
 
-### 1. Imagens
-- Substitua `/public/images/hero-field.jpg` pela imagem real exportada do Figma
-- Atualize o caminho em `app/assets.ts` se necessário
+O projeto inclui estrutura de testes com Jest e Testing Library. Exemplos de testes estão em `app/__tests__/`.
 
-### 2. SVG Paths
-- Os caminhos SVG em `app/imports/svg-9po0gahbk9.ts` são placeholders
-- Exporte os SVGs do Figma e substitua os paths pelos reais
+## 📝 Convenções
 
-### 3. Componentes Placeholder
-- `Card.tsx` e `EventsCalendar.tsx` são componentes básicos
-- Implemente a lógica real conforme necessário
+- Componentes funcionais com TypeScript
+- Nomenclatura PascalCase para componentes
+- camelCase para funções e variáveis
+- Pastas em lowercase
+- Tipos exportados de `app/types/`
+- Hooks customizados em `app/hooks/`
 
-### 4. Dados
-- Os dados em `app/data.ts` são exemplos
-- Substitua por dados reais da sua API ou fonte de dados
+## 🔄 Próximos Passos
 
-## Estrutura do Projeto
+- [ ] Migrar componentes legacy para estrutura moderna
+- [ ] Adicionar mais testes unitários
+- [ ] Implementar testes E2E
+- [ ] Otimizar performance com React.memo onde necessário
+- [ ] Adicionar documentação de componentes com Storybook
 
-- `app/components/App.tsx` - Componente principal da aplicação
-- `app/components/ui/` - Componentes UI (Select, etc.)
-- `app/components/` - Componentes customizados (FeaturedCard, NewsCard, etc.)
-- `app/imports/` - Componentes e assets importados do Figma
-- `app/data.ts` - Dados estáticos da aplicação
-- `app/icons.tsx` - Ícones da aplicação (Lucide React)
-- `app/assets.ts` - Assets estáticos (imagens, etc.)
+## 📄 Licença
 
+Este projeto é privado e proprietário.

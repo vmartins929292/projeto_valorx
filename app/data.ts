@@ -1,12 +1,11 @@
-import svgPaths from './imports/svg-9po0gahbk9'
+import svgPaths from './components/legacy/svg-9po0gahbk9'
 import { ICONS } from './icons'
 import { ASSETS } from './assets'
-import type { FeaturedArticle } from './components/FeaturedCard'
-import type { NewsArticle } from './components/NewsCard'
+import type { FeaturedArticle, NewsArticle, MenuItem, Stock } from './types'
 
 // Menu items
-export const MENU_ITEMS = Object.freeze([
-  { id: 'all', label: 'Tudo', icon: null },
+export const MENU_ITEMS: readonly MenuItem[] = Object.freeze([
+  { id: 'all', label: 'Tudo' },
   { id: 'soja', label: 'Soja', iconPath: svgPaths.p13498e00 },
   { id: 'milho', label: 'Milho', iconPath: svgPaths.p3079c00 },
   { id: 'algodao', label: 'Algodão', iconPath: svgPaths.p3792c780 },
@@ -19,13 +18,13 @@ export const MENU_ITEMS = Object.freeze([
 ] as const)
 
 // Stocks data
-export const STOCKS = Object.freeze([
-  { name: 'S&P 500', value: '5.973,77', change: -0.53, direction: 'down' as const },
-  { name: 'Nasdaq', value: '13.423,18', change: 0.53, direction: 'up' as const },
-  { name: 'Shanghai', value: '13.423,18', change: 0.53, direction: 'up' as const },
-  { name: 'FTSE 100', value: '13.423,18', change: 0.53, direction: 'up' as const },
-  { name: 'Brent Oil', value: '13.423,18', change: 0.53, direction: 'up' as const },
-  { name: '10 Year US Gov', value: '5.973,77', change: -0.53, direction: 'down' as const },
+export const STOCKS: readonly Stock[] = Object.freeze([
+  { name: 'S&P 500', value: '5.973,77', change: -0.53, direction: 'down' },
+  { name: 'Nasdaq', value: '13.423,18', change: 0.53, direction: 'up' },
+  { name: 'Shanghai', value: '13.423,18', change: 0.53, direction: 'up' },
+  { name: 'FTSE 100', value: '13.423,18', change: 0.53, direction: 'up' },
+  { name: 'Brent Oil', value: '13.423,18', change: 0.53, direction: 'up' },
+  { name: '10 Year US Gov', value: '5.973,77', change: -0.53, direction: 'down' },
 ] as const)
 
 // Featured article

@@ -11,7 +11,7 @@ export default function StocksTicker() {
 
   return (
     <section className="bg-cyan-950 overflow-hidden">
-      <div className="site-container py-3">
+      <div className="site-container py-1">
         <div
           className={`flex gap-1.5 ticker ${isTickerPaused ? 'ticker-paused' : ''}`}
           onMouseEnter={() => setIsTickerPaused(true)}
@@ -22,13 +22,13 @@ export default function StocksTicker() {
           {stocksDup.map((stock, i) => (
             <div
               key={i}
-              className="flex-shrink-0 px-2 py-1.5 bg-cyan-900/40 rounded-sm border border-cyan-800/50"
+              className="flex-shrink-0 px-1.5 py-0.5 bg-cyan-900/40 rounded-sm border border-cyan-800/50"
             >
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-0.5">
                 <span className="font-montserrat-semibold text-slate-50 ticker-text">{stock.name}</span>
                 <span className="font-montserrat text-slate-200 ticker-text opacity-90">{stock.value}</span>
                 <span
-                  className={`px-1 rounded-sm ${
+                  className={`px-0.5 rounded-sm ${
                     stock.direction === 'down'
                       ? 'bg-red-950/50 text-red-500'
                       : 'bg-cyan-950/50 text-[#2a9d90]'

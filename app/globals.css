@@ -47,6 +47,7 @@ a,
   cursor: pointer;
 }
 
+
 @layer utilities {
   .site-container {
     @apply max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8;
@@ -66,7 +67,7 @@ a,
   }
 
   .ticker {
-    @apply animate-[ticker-scroll_30s_linear_infinite];
+    @apply animate-[ticker-scroll_15s_linear_infinite];
   }
 
   .ticker-paused {
@@ -156,6 +157,60 @@ a,
   to {
     opacity: 1;
   }
+}
+
+/* Animação otimizada para gradientes - usa GPU */
+@keyframes pulse-gradient {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Otimização de performance para elementos animados */
+[style*="pulse-gradient"] {
+  will-change: opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Animação de zoom suave para imagens do carrossel - otimizada com GPU */
+.image-zoom {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: image-zoom-in 12s ease-out forwards;
+}
+
+@keyframes image-zoom-in {
+  from {
+    transform: scale(1) translateZ(0);
+  }
+  to {
+    transform: scale(1.15) translateZ(0);
+  }
+}
+
+/* Estilização customizada do select dropdown */
+select option {
+  background: white;
+  color: #083344;
+  padding: 10px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+select option:hover {
+  background: #f1f5f9;
+}
+
+select option:checked {
+  background: linear-gradient(to right, #01b792, #2a9d8f);
+  color: white;
+  font-weight: 600;
 }
 
 
