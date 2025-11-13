@@ -6,11 +6,11 @@ import type { FeaturedArticle, NewsArticle, MenuItem, Stock } from './types'
 // Menu items
 export const MENU_ITEMS: readonly MenuItem[] = Object.freeze([
   { id: 'all', label: 'Tudo' },
-  { id: 'soja', label: 'Soja', iconPath: svgPaths.p13498e00 },
-  { id: 'milho', label: 'Milho', iconPath: svgPaths.p3079c00 },
-  { id: 'algodao', label: 'Algodão', iconPath: svgPaths.p3792c780 },
-  { id: 'oleos', label: 'Óleos Vegetais', iconPath: svgPaths.p3792c780 },
-  { id: 'macro', label: 'Macro', iconPath: svgPaths.p3fc08100 },
+  { id: 'soja', label: 'Soja', icon: ICONS.Wheat },
+  { id: 'milho', label: 'Milho', icon: ICONS.Sprout },
+  { id: 'algodao', label: 'Algodão', icon: ICONS.Flower },
+  { id: 'oleos', label: 'Óleos Vegetais', icon: ICONS.Droplet },
+  { id: 'macro', label: 'Macro', icon: ICONS.Macro },
   { id: 'dolar', label: 'Dólar', icon: ICONS.DollarSign },
   { id: 'clima', label: 'Clima', icon: ICONS.Cloud },
   { id: 'logistica', label: 'Logística', icon: ICONS.Truck },

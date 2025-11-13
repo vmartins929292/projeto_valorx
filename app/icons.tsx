@@ -22,6 +22,12 @@ import {
   TrendingDown,
   Clock,
   Sparkles,
+  Wheat,
+  Grain,
+  Sprout,
+  Flower,
+  Droplet,
+  Activity,
 } from "lucide-react"
 
 export const ICONS = {
@@ -48,6 +54,12 @@ export const ICONS = {
   TrendingDown,
   Clock,
   Sparkles,
+  Wheat,
+  Grain,
+  Sprout,
+  Flower,
+  Droplet,
+  Macro: Activity,
 } as const
 
 /**

@@ -6,13 +6,25 @@ export function useWaveAnimation(itemsCount: number, isOpen: boolean) {
   )
 
   useEffect(() => {
-    const STAGGER = 60
+    // Reset todos os itens quando o estado muda
+    if (isOpen) {
+      setItemsVisible(Array(itemsCount).fill(false))
+    }
+    
+    // Duração total da animação (em ms)
+    const TOTAL_DURATION = itemsCount > 0 ? Math.min(itemsCount * 50, 400) : 0
+    // Calcula o delay entre cada item para distribuir uniformemente
+    const STAGGER = itemsCount > 1 ? TOTAL_DURATION / (itemsCount - 1) : 0
+    
     let cancelled = false
     const ids: number[] = []
 
     const run = () => {
       if (isOpen) {
+        // Pequeno delay inicial para garantir que o reset foi aplicado
+        const initialDelay = 10
         for (let i = 0; i < itemsCount; i++) {
+          const delay = initialDelay + Math.round(i * STAGGER)
           const id = window.setTimeout(() => {
             if (!cancelled) {
               setItemsVisible((v) => {
@@ -21,12 +33,13 @@ export function useWaveAnimation(itemsCount: number, isOpen: boolean) {
                 return n
               })
             }
-          }, i * STAGGER)
+          }, delay)
           ids.push(id)
         }
       } else {
         for (let i = 0; i < itemsCount; i++) {
           const j = itemsCount - 1 - i
+          const delay = Math.round(i * STAGGER)
           const id = window.setTimeout(() => {
             if (!cancelled) {
               setItemsVisible((v) => {
@@ -35,13 +48,19 @@ export function useWaveAnimation(itemsCount: number, isOpen: boolean) {
                 return n
               })
             }
-          }, i * STAGGER)
+          }, delay)
           ids.push(id)
         }
       }
     }
 
-    run()
+    // Pequeno delay para garantir que o reset foi aplicado antes de iniciar a animação
+    const runId = window.setTimeout(() => {
+      if (!cancelled) {
+        run()
+      }
+    }, isOpen ? 10 : 0)
+    ids.push(runId)
 
     return () => {
       cancelled = true

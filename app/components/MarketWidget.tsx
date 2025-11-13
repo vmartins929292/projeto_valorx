@@ -662,10 +662,34 @@ interface MarketWidgetProps {
   isActive?: boolean
 }
 
+// Interface para dados de performance
+interface PerformanceData {
+  '5 dias': number
+  '10 dias': number
+  '1 mês': number
+  'Ano': number
+}
+
+// Função para gerar dados de performance baseados no preço atual e variação
+const generatePerformanceData = (currentPrice: string, change: number): PerformanceData => {
+  const baseChange = change / 100 // Converter para decimal
+  
+  // Calcular performance percentual para cada período
+  // Baseado na variação atual, simulamos variações históricas proporcionais
+  return {
+    '5 dias': baseChange * 0.3 * 100, // ~30% da variação atual em 5 dias
+    '10 dias': baseChange * 0.6 * 100, // ~60% da variação atual em 10 dias
+    '1 mês': baseChange * 1.2 * 100, // ~120% da variação atual em 1 mês
+    'Ano': baseChange * 2.5 * 100, // ~250% da variação atual no ano
+  }
+}
+
 const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActive = true }: MarketWidgetProps) {
   const [activeTab, setActiveTab] = useState('Todas')
   const [activePeriod, setActivePeriod] = useState('1A')
   const [selectedMarket, setSelectedMarket] = useState<MarketData | null>(null)
+  const [viewMode, setViewMode] = useState<'market' | 'performance'>('market')
+  const [rankingPeriod, setRankingPeriod] = useState<keyof PerformanceData>('Ano')
 
   // Filtrar mercados pela categoria (memoizado)
   const categoryMarkets = useMemo(() => {
@@ -714,7 +738,269 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
     }
   }
 
+  // Função para formatar percentual
+  const formatPercent = (value: number): string => {
+    const sign = value >= 0 ? '+' : ''
+    return `${sign}${value.toFixed(2)}%`
+  }
+
   if (!selectedMarket) return null
+
+  // Renderizar view de performance
+  if (viewMode === 'performance') {
+    return (
+      <div 
+        className="text-[11px]"
+        style={{
+          contain: !isActive ? 'style layout paint' : undefined,
+        }}
+      >
+        {/* Header com botão de voltar */}
+        <div className="flex items-center justify-between border-b border-slate-200 px-3 py-2">
+          <h3 className="font-montserrat-semibold text-slate-900" style={{ fontSize: '12px' }}>
+            Performance
+          </h3>
+          <button
+            onClick={() => isActive && setViewMode('market')}
+            className="flex items-center gap-1 px-2 py-1 rounded-md font-montserrat-semibold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
+            disabled={!isActive}
+          >
+            <ICONS.ChevronLeft className="w-3 h-3" />
+            Voltar
+          </button>
+        </div>
+
+        <div className="px-3 pt-3 pb-2">
+          {/* Tabs no topo */}
+          <div className="flex items-stretch border-b border-slate-200 gap-0 mb-3">
+            {['Todas', 'Em Alta', 'Em Queda'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`flex-1 py-1.5 px-2 font-montserrat-semibold transition-all duration-200 relative text-center flex items-center justify-center group ${
+                  activeTab === tab
+                    ? 'text-[#2a9d8f] bg-emerald-50/50'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+                style={{ fontSize: '12px' }}
+                disabled={!isActive}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2a9d8f]" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Seletor de Período para Rankings e Rankings - apenas quando "Todas" */}
+          {activeTab === 'Todas' && (
+            <>
+              {/* Seletor de Período para Rankings */}
+              <div className="mb-3 flex items-center justify-center gap-1">
+                {(['5 dias', '10 dias', '1 mês', 'Ano'] as Array<keyof PerformanceData>).map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => isActive && setRankingPeriod(period)}
+                    className={`px-2 py-0.5 rounded font-montserrat-semibold transition-all ${
+                      rankingPeriod === period
+                        ? 'bg-emerald-800 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                    style={{ fontSize: '8px' }}
+                    disabled={!isActive}
+                  >
+                    {period}
+                  </button>
+                ))}
+              </div>
+
+              {/* Rankings */}
+              <div className="mb-4 space-y-2.5">
+            {/* Top 5 Maiores Altas */}
+            <div className="border border-slate-200 rounded-md overflow-hidden">
+              <div className="bg-slate-50 border-b border-slate-200 px-2.5 py-1.5">
+                <h4 className="font-montserrat-semibold text-slate-900" style={{ fontSize: '10px' }}>
+                  Top 5 Maiores Altas ({rankingPeriod})
+                </h4>
+              </div>
+              <div className="divide-y divide-slate-100">
+                {(() => {
+                  const topGains = filteredMarkets
+                    .map((market) => {
+                      const performance = generatePerformanceData(market.price, market.change)
+                      return { market, performance: performance[rankingPeriod] }
+                    })
+                    .filter((item) => item.performance > 0)
+                    .sort((a, b) => b.performance - a.performance)
+                    .slice(0, 5)
+                  
+                  if (topGains.length === 0) {
+                    return (
+                      <div className="px-2.5 py-2">
+                        <span className="font-montserrat text-slate-500 text-[9px]">
+                          Nenhuma alta no período
+                        </span>
+                      </div>
+                    )
+                  }
+                  
+                  return topGains.map((item, index) => (
+                    <div key={item.market.symbol} className="flex items-center justify-between px-2.5 py-1.5 hover:bg-slate-50/50 transition-colors">
+                      <div className="flex items-center gap-2">
+                        <span className="font-montserrat-semibold text-slate-400" style={{ fontSize: '9px', minWidth: '20px' }}>
+                          {index + 1}º
+                        </span>
+                        <span className="font-montserrat-medium text-slate-900" style={{ fontSize: '10px' }}>
+                          {item.market.icon}
+                        </span>
+                      </div>
+                      <span className="font-montserrat-semibold text-emerald-700" style={{ fontSize: '10px' }}>
+                        {formatPercent(item.performance)}
+                      </span>
+                    </div>
+                  ))
+                })()}
+              </div>
+            </div>
+
+            {/* Top 5 Maiores Quedas */}
+            <div className="border border-slate-200 rounded-md overflow-hidden">
+              <div className="bg-slate-50 border-b border-slate-200 px-2.5 py-1.5">
+                <h4 className="font-montserrat-semibold text-slate-900" style={{ fontSize: '10px' }}>
+                  Top 5 Maiores Quedas ({rankingPeriod})
+                </h4>
+              </div>
+              <div className="divide-y divide-slate-100">
+                {(() => {
+                  const topLosses = filteredMarkets
+                    .map((market) => {
+                      const performance = generatePerformanceData(market.price, market.change)
+                      return { market, performance: performance[rankingPeriod] }
+                    })
+                    .filter((item) => item.performance < 0)
+                    .sort((a, b) => a.performance - b.performance)
+                    .slice(0, 5)
+                  
+                  if (topLosses.length === 0) {
+                    return (
+                      <div className="px-2.5 py-2">
+                        <span className="font-montserrat text-slate-500 text-[9px]">
+                          Nenhuma queda no período
+                        </span>
+                      </div>
+                    )
+                  }
+                  
+                  return topLosses.map((item, index) => (
+                    <div key={item.market.symbol} className="flex items-center justify-between px-2.5 py-1.5 hover:bg-slate-50/50 transition-colors">
+                      <div className="flex items-center gap-2">
+                        <span className="font-montserrat-semibold text-slate-400" style={{ fontSize: '9px', minWidth: '20px' }}>
+                          {index + 1}º
+                        </span>
+                        <span className="font-montserrat-medium text-slate-900" style={{ fontSize: '10px' }}>
+                          {item.market.icon}
+                        </span>
+                      </div>
+                      <span className="font-montserrat-semibold text-red-600" style={{ fontSize: '10px' }}>
+                        {formatPercent(item.performance)}
+                      </span>
+                    </div>
+                  ))
+                })()}
+              </div>
+            </div>
+          </div>
+            </>
+          )}
+
+          {/* Lista de Performance */}
+          <div>
+            {filteredMarkets.map((market) => {
+              const performance = generatePerformanceData(market.price, market.change)
+              const periods: Array<keyof PerformanceData> = ['5 dias', '10 dias', '1 mês', 'Ano']
+              
+              return (
+                <div
+                  key={market.symbol}
+                  className="py-2 px-2 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-b-0"
+                >
+                  {/* Nome da commodity e Var(%) */}
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <span 
+                      className="font-montserrat-semibold text-slate-900" 
+                      style={{ 
+                        fontSize: market.category === 'fx' ? '11px' : '12px', 
+                        lineHeight: '1.2'
+                      }}
+                    >
+                      {market.icon}
+                    </span>
+                    <span
+                      className={`font-montserrat-semibold whitespace-nowrap ${
+                        performance['Ano'] >= 0 ? 'text-emerald-700' : 'text-red-600'
+                      }`}
+                      style={{ fontSize: '10px' }}
+                    >
+                      {formatPercent(performance['Ano'])}
+                    </span>
+                  </div>
+
+                  {/* Barras de Performance Horizontais */}
+                  <div className="space-y-1.5">
+                    {periods.map((period) => {
+                      const perfPercent = performance[period]
+                      const isPositive = perfPercent >= 0
+                      const absPercent = Math.abs(perfPercent)
+                      // Escala ajustada: usar escala logarítmica suave para melhor visualização
+                      // Normalizar para máximo de 50% do espaço (já que dividimos por 2)
+                      const maxScale = 50
+                      const scaledPercent = Math.min(absPercent, maxScale * 2) // Limitar a 100% total
+                      const barWidth = (scaledPercent / (maxScale * 2)) * 100 // Converter para porcentagem do espaço total
+                      
+                      return (
+                        <div key={period} className="relative flex items-center gap-2">
+                          {/* Label do período */}
+                          <span className="font-montserrat-medium text-slate-600 whitespace-nowrap" style={{ fontSize: '9px', minWidth: '45px' }}>
+                            {period}
+                          </span>
+                          
+                          {/* Barra horizontal */}
+                          <div className="relative flex-1 h-3 bg-slate-100 overflow-hidden border border-slate-200">
+                            {/* Linha central (zero) - sempre visível */}
+                            <div className="absolute top-0 left-1/2 w-px h-full bg-slate-300 -translate-x-1/2 z-10" />
+                            
+                            {/* Barra de performance */}
+                            {isPositive ? (
+                              <div
+                                className="absolute top-0 left-1/2 h-full transition-all duration-700 ease-out bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700"
+                                style={{ 
+                                  width: `${barWidth / 2}%`,
+                                  transform: 'translateX(0)'
+                                }}
+                              />
+                            ) : (
+                              <div
+                                className="absolute top-0 right-1/2 h-full transition-all duration-700 ease-out bg-gradient-to-r from-red-700 via-red-600 to-red-500"
+                                style={{ 
+                                  width: `${barWidth / 2}%`,
+                                  transform: 'translateX(0)'
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div 
@@ -723,29 +1009,32 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
         contain: !isActive ? 'style layout paint' : undefined,
       }}
     >
-      {/* Tabs no topo */}
-      <div className="flex items-center border-b border-slate-200 gap-1">
-        {['Todas', 'Em Alta', 'Em Queda'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => handleTabChange(tab)}
-            className={`flex-1 py-2 px-2 font-montserrat-semibold transition-all duration-200 relative text-center flex items-center justify-center ${
-              activeTab === tab
-                ? 'text-slate-900'
-                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50/50'
-            }`}
-            style={{ fontSize: '12px' }}
-          >
-            {tab}
-            {/* Indicador ativo */}
-            {activeTab === tab && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2a9d8f]" />
-            )}
-          </button>
-        ))}
+      {/* Header com tabs e botão de Performance */}
+      <div className="border-b border-slate-200">
+        {/* Tabs no topo */}
+        <div className="flex items-stretch gap-0">
+          {['Todas', 'Em Alta', 'Em Queda'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`flex-1 py-1.5 px-2 font-montserrat-semibold transition-all duration-200 relative text-center flex items-center justify-center group ${
+                activeTab === tab
+                  ? 'text-[#2a9d8f] bg-emerald-50/50'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+              style={{ fontSize: '12px' }}
+              disabled={!isActive}
+            >
+              {tab}
+              {activeTab === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2a9d8f]" />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="px-3 pt-3 pb-2">
+      <div className="px-3 pt-3 pb-1">
         {/* Gráfico Principal Grande */}
         <div className="mb-1">
           {/* Header com nome e cotação da commodity selecionada */}
@@ -852,12 +1141,12 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
         </div>
 
         {/* Lista de Commodities */}
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-slate-200 mb-2">
           {filteredMarkets.map((market, index) => (
             <div
               key={market.symbol}
               onClick={() => isActive && setSelectedMarket(market)}
-              className={`grid grid-cols-[1fr_auto] items-center gap-2 py-1.5 px-2 hover:bg-slate-50 transition-colors cursor-pointer select-none outline-none ${
+              className={`py-1.5 px-2 hover:bg-slate-50 transition-colors cursor-pointer select-none outline-none ${
                 selectedMarket.symbol === market.symbol ? 'bg-slate-50/50 border-l-2 border-slate-300' : ''
               }`}
             >
@@ -886,41 +1175,25 @@ const MarketWidget = memo(function MarketWidget({ category = 'agricolas', isActi
                   </span>
                 </div>
               </div>
-
-              {/* Mini Gráfico */}
-              <div className="h-[20px] w-[80px] flex-shrink-0 select-none outline-none">
-                <ResponsiveContainer width="100%" height="100%" key={`${activePeriod}-${index}`}>
-                  <AreaChart data={market.data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id={`mini-gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="0%"
-                          stopColor={market.change > 0 ? '#047857' : '#dc2626'}
-                          stopOpacity={0.4}
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor={market.change > 0 ? '#047857' : '#dc2626'}
-                          stopOpacity={0.05}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide />
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      stroke={market.change > 0 ? '#047857' : '#dc2626'}
-                      strokeWidth={1}
-                      fill={`url(#mini-gradient-${index})`}
-                      fillOpacity={1}
-                      dot={false}
-                      isAnimationActive={false}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
             </div>
           ))}
+        </div>
+
+        {/* Botão de Performance - no bottom */}
+        <div className="px-3 pt-3 pb-1 border-t border-slate-200">
+          <button
+            onClick={() => isActive && setViewMode('performance')}
+            className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md font-montserrat-semibold text-xs bg-slate-50 text-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-slate-200 relative overflow-hidden group"
+            disabled={!isActive}
+            title="Ver Performance das Commodities"
+          >
+            {/* Gradiente de preenchimento progressivo da esquerda para direita no hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-emerald-300/7 to-emerald-200/4 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out origin-left scale-x-0 group-hover:scale-x-100" />
+            <div className="relative z-10 flex items-center justify-center gap-1.5">
+              <ICONS.BarChart3 className="w-3.5 h-3.5" />
+              <span>Ver Performance</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>

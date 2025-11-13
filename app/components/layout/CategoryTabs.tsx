@@ -35,7 +35,7 @@ export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsPr
   }, [submenuOpen])
 
   return (
-    <section className="site-container py-6">
+    <section className="site-container py-6 mb-1">
       <div ref={submenuContainerRef} className="flex items-center gap-3 -mt-2">
         {/* Hamburger Menu Button */}
         <button
@@ -75,14 +75,16 @@ export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsPr
         <div 
           className="relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(.25,.8,.25,1)]"
           style={{
-            maxWidth: submenuOpen ? '1000px' : '0px',
-            width: submenuOpen ? 'fit-content' : '0px',
+            maxWidth: submenuOpen ? 'calc(100% - 420px)' : '0px',
+            width: submenuOpen ? 'calc(100% - 420px)' : '0px',
             opacity: submenuOpen ? 1 : 0,
+            flex: submenuOpen ? '1 1 auto' : '0 0 0',
+            minWidth: 0,
           }}
         >
           <nav 
             ref={navRef}
-            className="relative bg-gradient-to-br from-slate-100/90 via-blue-50/80 to-cyan-50/90 backdrop-blur-xl rounded-[10px] shadow-none border-0 inline-block"
+            className="relative bg-gradient-to-br from-slate-100/90 via-blue-50/80 to-cyan-50/90 backdrop-blur-xl rounded-[10px] shadow-none border-0 w-full"
           >
             <div 
               className="relative overflow-x-auto overflow-y-hidden border-0 shadow-none [-webkit-overflow-scrolling:touch]"
@@ -91,7 +93,7 @@ export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsPr
                 msOverflowStyle: 'none'
               }}
             >
-              <div ref={buttonsContainerRef} className="relative flex items-center gap-2 flex-nowrap px-3 py-1 overflow-x-auto scrollbar-hide">
+              <div ref={buttonsContainerRef} className="relative flex items-center gap-3 flex-nowrap px-3 py-1 overflow-x-auto scrollbar-hide w-full">
                 {/* Animated sliding indicator */}
                 <div 
                   className="absolute rounded-lg bg-white/95 shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-white/80 backdrop-blur-md pointer-events-none"
@@ -113,7 +115,7 @@ export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsPr
                       e.stopPropagation()
                       setActiveTab(item.id)
                     }}
-                    className={`relative inline-flex items-center justify-center gap-1 h-[24px] px-2.5 rounded-lg font-montserrat-medium whitespace-nowrap flex-shrink-0 ${
+                    className={`relative inline-flex items-center justify-center gap-1 h-[24px] px-2 rounded-lg font-montserrat-medium whitespace-nowrap flex-shrink-0 ${
                       activeTab === item.id 
                         ? 'text-cyan-950' 
                         : 'text-gray-600 hover:text-cyan-950'
@@ -138,10 +140,10 @@ export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsPr
                     )}
                     
                     {'icon' in item && item.icon && (
-                      <item.icon className="w-3.5 h-3.5 block" />
+                      <item.icon size={14} className="w-3.5 h-3.5 block flex-shrink-0" />
                     )}
                     
-                    <span className="block !text-[12px] !leading-[1.1]">{item.label}</span>
+                    <span className="block !text-[12px] !leading-[1.1] font-montserrat">{item.label}</span>
                   </TactileButton>
                 ))}
               </div>

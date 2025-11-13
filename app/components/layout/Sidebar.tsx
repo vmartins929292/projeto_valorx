@@ -179,7 +179,7 @@ export default function Sidebar() {
 
           {/* Widget de Cotações */}
           <motion.div 
-            className="mt-2 relative z-0"
+            className="mt-1 relative z-0"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}

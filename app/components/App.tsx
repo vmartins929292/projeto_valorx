@@ -40,7 +40,7 @@ export default function App() {
               <NewsGrid articles={NEWS_ARTICLES} />
 
               {/* Linha Divisória */}
-              <div className="mb-6">
+              <div className="mb-2">
                 <div className="h-[0.5px] w-full bg-slate-300/30"></div>
               </div>
 

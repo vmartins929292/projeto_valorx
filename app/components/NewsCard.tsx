@@ -10,11 +10,11 @@ export default function NewsCard({ article }: NewsCardProps) {
   return (
     <article className="bg-white rounded-xl card-border shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="p-5">
-        <h3 className="font-montserrat-semibold text-lg md:text-xl text-cyan-950 mb-2 line-clamp-2" style={{ lineHeight: '1' }}>
+        <h3 className="font-montserrat-semibold text-sm md:text-base text-cyan-950 mb-2 line-clamp-2" style={{ lineHeight: '1.2' }}>
           {article.title}
         </h3>
 
-        <p className="font-montserrat text-sm text-slate-600 mb-4 line-clamp-3">
+        <p className="font-montserrat text-xs text-slate-600 mb-4 line-clamp-3" style={{ lineHeight: '1.4' }}>
           {article.excerpt}
         </p>
 

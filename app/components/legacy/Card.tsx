@@ -26,19 +26,14 @@ function Col() {
           <div
             key={index}
             className={`
-              relative pl-20 py-4
+              relative pl-16 py-4
               ${index !== items.length - 1 ? 'border-b border-slate-100' : ''}
               ${index === 0 ? 'mt-5' : ''}
             `}
           >
-            {/* Linha vertical - continua até o próximo item */}
-            {index < items.length - 1 && (
-              <div className="absolute left-[52px] top-6 bottom-0 w-[1px] bg-slate-200" />
-            )}
-            
             {/* Timestamp e marcador */}
-            <div className="absolute left-0 top-0 flex items-start gap-2">
-              <div className="text-right" style={{ width: '40px' }}>
+            <div className="absolute left-0 top-0 flex items-start gap-1.5">
+              <div className="text-right flex flex-col" style={{ width: '40px' }}>
                 <div className={`font-montserrat-semibold ${index === 0 ? 'text-red-600' : 'text-cyan-950'}`} style={{ fontSize: '11px', lineHeight: '1.2' }}>
                   {item.time}
                 </div>
@@ -46,14 +41,19 @@ function Col() {
                   {item.date}
                 </div>
               </div>
-              {/* Círculo marcador */}
-              <div className="relative flex-shrink-0" style={{ marginTop: '2px' }}>
-                <div className="w-3 h-3 rounded-full bg-white border-2 border-cyan-950" />
+              {/* Círculo marcador - centralizado no horário */}
+              <div className="relative flex-shrink-0 flex items-center justify-center" style={{ width: '10px', height: '10px', marginTop: '1.5px' }}>
                 {index === 0 && (
-                  <div className="absolute inset-0 w-3 h-3 rounded-full bg-cyan-950 animate-ping opacity-30" />
+                  <div className="absolute rounded-full bg-cyan-950 animate-ping opacity-30" style={{ width: '10px', height: '10px' }} />
                 )}
+                <div className="relative rounded-full bg-white border-2 border-cyan-950 z-10" style={{ width: '10px', height: '10px' }} />
               </div>
             </div>
+            
+            {/* Linha vertical - alinhada com o centro do círculo */}
+            {index < items.length - 1 && (
+              <div className="absolute left-[51px] top-[6.5px] bottom-[6.5px] w-[1px] bg-slate-200" />
+            )}
 
             {/* Conteúdo da notícia */}
             <div className="group cursor-pointer">
@@ -79,9 +79,9 @@ function Tbody() {
   return (
     <div 
       className="content-stretch flex-none items-start max-h-[600px] overflow-y-auto overflow-x-clip relative w-full z-[1]
-                [&::-webkit-scrollbar]:w-[6px]
+                [&::-webkit-scrollbar]:w-[2px]
                 [&::-webkit-scrollbar-track]:bg-transparent
-                [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-[3px]
+                [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-[1px]
                 [&::-webkit-scrollbar-thumb]:transition-all [&::-webkit-scrollbar-thumb]:duration-300
                 hover:[&::-webkit-scrollbar-thumb]:bg-[#065f46]/75"
       style={{ scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}
@@ -136,14 +136,15 @@ function Select1() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-[130px] h-9 text-xs bg-white border border-slate-200 rounded-lg px-4 py-2 font-montserrat-semibold text-cyan-950 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-[#01b792] cursor-pointer transition-all duration-300 hover:border-[#01b792]/50 hover:shadow-lg hover:shadow-[#01b792]/10 flex items-center justify-between"
+        className="w-[115px] text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1 font-montserrat-semibold text-cyan-950 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-[#01b792] cursor-pointer transition-all duration-300 hover:border-[#01b792]/50 hover:shadow-lg hover:shadow-[#01b792]/10 flex items-center justify-between"
         style={{
+          height: '28px',
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.08)',
         }}
       >
         <span>{selectedOption.label}</span>
         <ICONS.ChevronDown 
-          size={14} 
+          size={13} 
           className={`text-cyan-950 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
         />
       </button>
@@ -155,7 +156,7 @@ function Select1() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="absolute top-full left-0 mt-1 w-[130px] rounded-lg shadow-xl overflow-hidden backdrop-blur-md pointer-events-auto"
+            className="absolute top-full left-0 mt-1 w-[115px] rounded-lg shadow-xl overflow-hidden backdrop-blur-md pointer-events-auto"
             style={{
               background: 'rgba(255, 255, 255, 0.85)',
               backdropFilter: 'blur(12px)',
@@ -202,11 +203,11 @@ function Select1() {
 // Header com título "Últimas" e botão de filtro
 function Row() {
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex flex-col font-montserrat-semibold justify-center leading-[0] not-italic relative shrink-0 text-[16px] text-red-600 text-nowrap">
-        <p className="leading-[24px] whitespace-pre">Últimas</p>
+    <div className="flex items-center gap-0.5">
+      <div className="flex flex-col font-montserrat-semibold justify-center leading-[0] not-italic relative shrink-0 text-[15px] text-cyan-950 text-nowrap">
+        <p className="leading-[22px] whitespace-pre">Últimas</p>
       </div>
-      <ICONS.ChevronRight size={16} className="text-red-600" />
+      <ICONS.ChevronRight size={15} className="text-cyan-950" />
     </div>
   )
 }
@@ -214,7 +215,7 @@ function Row() {
 function Div() {
   return (
     <div className="relative shrink-0 w-full z-[2]" data-name="Div">
-      <div className="content-stretch flex items-center justify-between pb-3 pt-4 px-5 relative w-full 
+      <div className="content-stretch flex items-center justify-between pb-5 pt-5 px-5 relative w-full 
                       bg-gradient-to-b from-white to-white/95
                       border-b border-slate-100/80
                       backdrop-blur-sm
