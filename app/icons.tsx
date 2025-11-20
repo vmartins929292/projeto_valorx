@@ -23,11 +23,11 @@ import {
   Clock,
   Sparkles,
   Wheat,
-  Grain,
   Sprout,
   Flower,
   Droplet,
   Activity,
+  Calendar,
 } from "lucide-react"
 
 export const ICONS = {
@@ -55,11 +55,11 @@ export const ICONS = {
   Clock,
   Sparkles,
   Wheat,
-  Grain,
   Sprout,
   Flower,
   Droplet,
   Macro: Activity,
+  Calendar,
 } as const
 
 /**

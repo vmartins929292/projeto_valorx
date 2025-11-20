@@ -107,7 +107,7 @@ export default function PerformanceSection() {
                 src={mainArticle.image}
                 alt={mainArticle.title}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="object-cover image-zoom group-hover:scale-105 transition-transform duration-700 ease-out"
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -156,7 +156,7 @@ export default function PerformanceSection() {
                       src={thumb}
                       alt={`${rightArticle.title} - imagem ${index + 1}`}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                      className="object-cover image-zoom group-hover:scale-110 transition-transform duration-500 ease-out"
                       sizes="(max-width: 768px) 33vw, 11vw"
                     />
                   </div>

@@ -7,6 +7,7 @@ export type NewsArticle = {
   excerpt: string
   tag: string
   date: string
+  section?: string
 }
 
 export interface FeaturedArticle {
@@ -14,7 +15,9 @@ export interface FeaturedArticle {
   updateText: string
   updateDate: string
   highlights: string[]
-  image: string
+  image?: string
+  video?: string
+  videoPoster?: string
   isLive?: boolean
   liveBadgeText?: string
   tag?: string
@@ -47,5 +50,43 @@ export interface MarketData {
   chartData: { value: number; month: string }[]
   icon: string
   category: MarketCategory
+}
+
+export interface LiveFeedEntry {
+  id: string
+  timestamp: string
+  title: string
+  excerpt: string
+  content: string[]
+  category: string
+  tag: string
+  author: string
+}
+
+export interface LiveFeedChartData {
+  series: Array<{
+    date: string
+    soja: number
+    milho: number
+    dolar: number
+    indices: number
+  }>
+  lastUpdate: string
+}
+
+export interface LiveFeedHeaderData {
+  headline: string
+  subheadline: string
+  lastUpdate: string
+}
+
+export type ConnectionStatus = 'connected' | 'disconnected' | 'connecting' | 'error'
+
+export type WebSocketEventType = 'feed_update' | 'chart_update' | 'header_update' | 'connection_status'
+
+export interface WebSocketMessage {
+  type: WebSocketEventType
+  payload: LiveFeedEntry | LiveFeedChartData | LiveFeedHeaderData | ConnectionStatus
+  timestamp: string
 }
 

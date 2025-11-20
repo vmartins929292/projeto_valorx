@@ -57,7 +57,8 @@ export default function Header({ mobileMenuOpen, setMobileMenuOpen }: HeaderProp
             <ICONS.Radio size={16} className="text-red-600 animate-pulse" />
             Live Feed
           </a>
-          <a href="#" className="relative flex items-center gap-2 px-3 py-2 font-montserrat text-[12.5px] uppercase text-slate-500 hover:text-cyan-950 hover:bg-slate-50 transition-colors whitespace-nowrap after:absolute after:bottom-0 after:h-[0.5px] after:w-0 after:bg-emerald-900 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full border-r border-slate-100">
+          {/* 🔧 AQUI: adicionado after:left-0 para o sublinhado ficar no botão certo */}
+          <a href="#" className="relative flex items-center gap-2 px-3 py-2 font-montserrat text-[12.5px] uppercase text-slate-500 hover:text-cyan-950 hover:bg-slate-50 transition-colors whitespace-nowrap after:absolute after:bottom-0 after:left-0 after:h-[0.5px] after:w-0 after:bg-emerald-900 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full border-r border-slate-100">
             <ICONS.FileText size={16} />
             Notícias
           </a>
@@ -69,7 +70,7 @@ export default function Header({ mobileMenuOpen, setMobileMenuOpen }: HeaderProp
             <ICONS.Calculator size={16} />
             Valor Quant
           </a>
-          <a href="#" className="relative flex items-center gap-2 px-3 py-2 font-montserrat text-[12.5px] uppercase text-slate-500 hover:text-cyan-950 hover:bg-slate-50 transition-colors whitespace-nowrap after:absolute after:bottom-0 after:h-[0.5px] after:w-0 after:bg-emerald-900 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full border-r border-slate-100">
+          <a href="#" className="relative flex items-center gap-2 px-3 py-2 font-montserrat text-[12.5px] uppercase text-slate-500 hover:text-cyan-950 hover:bg-slate-50 transition-colors whitespace-nowrap after:absolute after:bottom-0 after:left-0 after:h-[0.5px] after:w-0 after:bg-emerald-900 after:transition-all after:duration-300 after:ease-in-out hover:after:w-full border-r border-slate-100">
             <ICONS.FileStack size={16} />
             Relatórios 
           </a>
@@ -92,42 +93,43 @@ export default function Header({ mobileMenuOpen, setMobileMenuOpen }: HeaderProp
               <ICONS.Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input 
                 type="text" 
-                placeholder="Buscar notícias, commoditie"
+                placeholder="Buscar notícias, commodities"
                 className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-md font-montserrat text-sm text-cyan-950 placeholder:text-slate-400 focus:outline-none focus:border-[#01b792] focus:ring-1 focus:ring-[#01b792] transition-colors"
               />
             </div>
             
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md bg-slate-100 font-montserrat-medium text-sm text-cyan-950">
+            {/* Mesmos menus do desktop, mesma ordem */}
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md bg-slate-100 font-montserrat-medium text-sm text-cyan-950">
               <ICONS.Home size={18} />
               Home
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
-              <ICONS.Radio size={18} />
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+              <ICONS.Radio size={18} className="text-red-600" />
               Live Feed
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.FileText size={18} />
-              News
+              Notícias
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.BarChart3 size={18} />
-              Data & Indicators
+              Dados & Indicadores
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.Calculator size={18} />
               Valor Quant
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.FileStack size={18} />
-              Reports
+              Relatórios
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.Shield size={18} />
               Risk Management
             </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-md font-montserrat text-sm text-slate-600 hover:bg-slate-50">
               <ICONS.Newspaper size={18} />
-              Weekend Edition
+              Valor Trading School
             </a>
           </div>
         </div>

@@ -118,12 +118,9 @@ export default function MostReadSection({ articles = defaultArticles }: MostRead
                 <div className="flex-1 relative z-10 min-w-0 max-w-[calc(100%-50px)] flex flex-col">
                   <div className="relative flex-1">
                     <div className="flex flex-col gap-2 mb-3">
-                      <h3 className="font-montserrat-medium text-xs text-cyan-950 break-words line-clamp-3 group-hover:text-emerald-700 transition-colors duration-300" style={{ lineHeight: '1.3', fontSize: '13px' }}>
+                      <h3 className="font-montserrat-medium text-xs text-cyan-950 break-words line-clamp-3 group-hover:text-emerald-700 transition-colors duration-300 leading-[0.85]" style={{ fontSize: '13px' }}>
                         {article.title}
                       </h3>
-                      <p className="font-montserrat text-slate-600 break-words line-clamp-3" style={{ fontSize: '10px', lineHeight: '1.4' }}>
-                        {article.excerpt}
-                      </p>
                     </div>
                     
                     <div className="flex items-center justify-between pt-2 mt-auto border-t border-slate-200/60">
